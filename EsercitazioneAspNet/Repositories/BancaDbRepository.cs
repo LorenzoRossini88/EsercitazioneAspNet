@@ -23,7 +23,7 @@ namespace EsercitazioneAspNet.Repositories
 
         public async Task<Banche?> GetBancaAsync(int bancheId)
         {
-            return await _ctx.Banches
+            return await _ctx.Banches.Include(b => b.BancheFunzionalita).ThenInclude(f => f.IdFunzionalitaNavigation)
             .Where(c => c.Id == bancheId)
             .FirstOrDefaultAsync();
         }
@@ -37,6 +37,6 @@ namespace EsercitazioneAspNet.Repositories
         //    banca.BancheFunzionalita
         //}
 
-        
+
     }
 }

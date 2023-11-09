@@ -70,7 +70,7 @@ namespace EsercitazioneAspNet.Controllers
 
 
         [HttpPut("update-bloccato/{id}")]
-        public async Task<IActionResult> PutUtentiAsync(int id, [FromBody] bool nuovoStatoBloccato)
+        public async Task<IActionResult> UpdateBloccatoAsync(int id, [FromBody] bool nuovoStatoBloccato)
         {
             var existingUtente = await _utentiRepo.GetUtenteAsync(id);
 
