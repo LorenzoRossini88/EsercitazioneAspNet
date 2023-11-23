@@ -1,4 +1,6 @@
-﻿using EsercitazioneAspNet.Dto;
+﻿using AutoMapper;
+using EsercitazioneAspNet.Dto;
+using EsercitazioneAspNet.Models;
 using EsercitazioneAspNet.Repositories;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,11 +12,13 @@ namespace EsercitazioneAspNet.Controllers
     public class FunzionalitaController : ControllerBase
     {
         private readonly IFunzionalitaDbRepository _funzRepo;
+        private readonly IMapper _mapper;
 
 
-        public FunzionalitaController(IFunzionalitaDbRepository funzRepo)
+        public FunzionalitaController(IFunzionalitaDbRepository funzRepo, IMapper mapper)
         {
             _funzRepo = funzRepo;
+            _mapper = mapper;
         }
 
         [HttpGet]
@@ -40,24 +44,17 @@ namespace EsercitazioneAspNet.Controllers
 
 
         [HttpGet("funz-banche/{bancaId}")]
-        public async Task<ActionResult<IEnumerable<string>>> GetFunzionalitasByBancaId(int bancaId)
+        public async Task<ActionResult<IEnumerable<BancheFunzionalitum>>> GetFunzionalitasByBancaId(int bancaId)
         {
-            var funzionalitaList = await _funzRepo.GetFunzionalitaByBancaIdAsync(bancaId);
+            var funzionalitaList = await _funzRepo.GetFunzionalitaBancaAsync(bancaId);
 
             if (funzionalitaList == null || !funzionalitaList.Any())
             {
                 return NotFound();
             }
 
-            // Converti gli ID delle funzionalità da long a int
-            var funzionalitaIds = funzionalitaList
-                .Select(bf => Convert.ToInt32(bf.IdFunzionalita))
-                .ToList();
-
-            // Ottieni i nomi delle funzionalità corrispondenti agli ID
-            var funzionalitaNomi = await _funzRepo.GetFunzionalitaNomiByIdsAsync(funzionalitaIds);
-
-            return Ok(funzionalitaNomi);
+            return Ok(_mapper.Map<IEnumerable<Funzionalitum>, IEnumerable<FunzionalitaDto>>(funzionalitaList));
+            
         }
 
 
@@ -71,7 +68,7 @@ namespace EsercitazioneAspNet.Controllers
         //        return NotFound();
         //    }
 
-        //    // Converti gli ID delle funzionalità da long a int
+        //    // Converto gli ID delle funzionalità da long a int
         //    var funzionalitaInfos = funzionalitaList
         //        .Select(bf => new FunzionalitaInfo
         //        {

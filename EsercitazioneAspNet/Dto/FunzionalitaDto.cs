@@ -2,7 +2,8 @@
 {
     public class FunzionalitaDto
     {
-        public string Name { get; set; }
         public int Id { get; set; }
+        public string Nome { get; set; }
+        
     }
 }

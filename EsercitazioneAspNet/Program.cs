@@ -30,6 +30,8 @@ builder.Services.AddScoped<IBancaDbRepository, BancaDbRepository>();
 builder.Services.AddScoped<IFunzionalitaDbRepository, FunzionalitaDbRepository>();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
+
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

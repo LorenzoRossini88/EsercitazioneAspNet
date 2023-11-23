@@ -8,11 +8,13 @@ namespace EsercitazioneAspNet.Repositories
     public class FunzionalitaDbRepository : IFunzionalitaDbRepository
     {
         private SoluzioneBankomatContext _ctx;
+        
 
 
         public FunzionalitaDbRepository(SoluzioneBankomatContext ctx)
         {
             _ctx = ctx ?? throw new AggregateException(nameof(ctx));
+            
         }
 
 
@@ -49,8 +51,23 @@ namespace EsercitazioneAspNet.Repositories
             return funzionalitaNomi;
         }
 
-        
+        public async Task<IEnumerable<Funzionalitum>> GetFunzionalitaBancaAsync(int bancaId)
+        {
+            var banca = await GetBancaAsync(bancaId);
+            if (banca == null)
+            {
+                return null;
+            }
+            return await _ctx.Funzionalita.Where(x => x.BancheFunzionalita.Where(y => y.IdBanca == bancaId).Count()>0).ToListAsync();
+        }
 
+
+        public async Task<Banche?> GetBancaAsync(int bancheId)
+        {
+            return await _ctx.Banches.Include(b => b.BancheFunzionalita).ThenInclude(f => f.IdFunzionalitaNavigation)
+            .Where(c => c.Id == bancheId)
+            .FirstOrDefaultAsync();
+        }
 
 
 
