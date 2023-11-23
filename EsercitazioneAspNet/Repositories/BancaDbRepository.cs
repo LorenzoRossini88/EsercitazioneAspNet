@@ -1,5 +1,6 @@
 ﻿using EsercitazioneAspNet.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection.Metadata.Ecma335;
 
 namespace EsercitazioneAspNet.Repositories
 {
@@ -28,14 +29,16 @@ namespace EsercitazioneAspNet.Repositories
             .FirstOrDefaultAsync();
         }
 
-        //public async Task<Funzionalitum> GetFunzionalitaAsync(int bancheId)
-        //{
-        //    var banca = await _ctx.Banches
-        //    .Where(c => c.Id == bancheId)
-        //    .FirstOrDefaultAsync();
-
-        //    banca.BancheFunzionalita
-        //}
+        public async Task<List<Funzionalitum>> GetFunzionalitaAsync(int bancheId)
+        {
+            var Banca = await GetBancaAsync(bancheId);
+            if (Banca == null)
+            {
+                return null;
+            }
+            return await _ctx.Funzionalita.Where(x => x.BancheFunzionalita.Any(y => y.IdBanca ==  bancheId)).ToListAsync();
+        }
+        
 
 
     }

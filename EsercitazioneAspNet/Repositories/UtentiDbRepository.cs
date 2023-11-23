@@ -35,12 +35,23 @@ namespace EsercitazioneAspNet.Repositories
         {
             if (utente != null)
             {
+                // Verifica se l'ID Banca fornito esiste nella tabella delle Banche
+                var banca = await _ctx.Banches.FindAsync(utente.IdBanca);
+
+                if (banca == null)
+                {
+                    // L'ID Banca non esiste, gestisci il caso appropriato
+                    // Puoi restituire un messaggio di errore, lanciare un'eccezione, o gestire in modo diverso a seconda delle tue esigenze.
+                    // Ad esempio, potresti restituire una risposta HTTP con uno stato 400 Bad Request.
+                    return; // o throw new ArgumentException("ID Banca non valido.");
+                }
+
+                // L'ID Banca è valido, procedi con l'aggiunta dell'utente
                 _ctx.Utentis.Add(utente);
                 await _ctx.SaveChangesAsync();
-                
             }
-            
         }
+
 
         public async Task UpdateUtenteAsync(Utenti updatedUtente)
         {

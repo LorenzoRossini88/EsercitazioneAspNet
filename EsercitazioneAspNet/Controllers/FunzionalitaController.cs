@@ -1,4 +1,5 @@
-﻿using EsercitazioneAspNet.Repositories;
+﻿using EsercitazioneAspNet.Dto;
+using EsercitazioneAspNet.Repositories;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EsercitazioneAspNet.Controllers
@@ -36,5 +37,59 @@ namespace EsercitazioneAspNet.Controllers
             }
             return Ok(FunzToReturn.Nome);
         }
+
+
+        [HttpGet("funz-banche/{bancaId}")]
+        public async Task<ActionResult<IEnumerable<string>>> GetFunzionalitasByBancaId(int bancaId)
+        {
+            var funzionalitaList = await _funzRepo.GetFunzionalitaByBancaIdAsync(bancaId);
+
+            if (funzionalitaList == null || !funzionalitaList.Any())
+            {
+                return NotFound();
+            }
+
+            // Converti gli ID delle funzionalità da long a int
+            var funzionalitaIds = funzionalitaList
+                .Select(bf => Convert.ToInt32(bf.IdFunzionalita))
+                .ToList();
+
+            // Ottieni i nomi delle funzionalità corrispondenti agli ID
+            var funzionalitaNomi = await _funzRepo.GetFunzionalitaNomiByIdsAsync(funzionalitaIds);
+
+            return Ok(funzionalitaNomi);
+        }
+
+
+        //[HttpGet("funz-banche/{bancaId}")]
+        //public async Task<ActionResult<IEnumerable<FunzionalitaInfo>>> GetFunzionalitasByBancaId(int bancaId)
+        //{
+        //    var funzionalitaList = await _funzRepo.GetFunzionalitaByBancaIdAsync(bancaId);
+
+        //    if (funzionalitaList == null || !funzionalitaList.Any())
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    // Converti gli ID delle funzionalità da long a int
+        //    var funzionalitaInfos = funzionalitaList
+        //        .Select(bf => new FunzionalitaInfo
+        //        {
+        //            Id = (int)bf.IdFunzionalita,
+        //            Nome = bf.Nome
+        //        })
+        //        .ToList();
+
+        //    return Ok(funzionalitaInfos);
+        //}
+
+
+
+
+
+
+
+
+
     }
 }

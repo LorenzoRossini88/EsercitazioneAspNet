@@ -1,14 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace EsercitazioneAspNet.Models
 {
     public partial class Banche
     {
+        
+
         public Banche()
         {
             BancheFunzionalita = new HashSet<BancheFunzionalitum>();
             Utentis = new HashSet<Utenti>();
+
         }
 
         public long Id { get; set; }

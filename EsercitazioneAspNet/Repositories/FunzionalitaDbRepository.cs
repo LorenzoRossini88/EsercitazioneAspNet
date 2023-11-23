@@ -1,5 +1,7 @@
 ﻿using EsercitazioneAspNet.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Collections;
+using System.Linq;
 
 namespace EsercitazioneAspNet.Repositories
 {
@@ -25,5 +27,33 @@ namespace EsercitazioneAspNet.Repositories
             .Where(c => c.Id== bancaId)
             .FirstOrDefaultAsync();
         }
+
+        public async Task<IEnumerable<Models.BancheFunzionalitum>> GetFunzionalitaByBancaIdAsync(int bancaId)
+        {
+            // Sostituisci questo con la tua logica di accesso ai dati
+            var funzionalitaList = await _ctx.BancheFunzionalita
+                .Where(bf => bf.IdBanca == bancaId)
+                .ToListAsync();
+
+            return funzionalitaList;
+        }
+
+
+        public async Task<IEnumerable<string>> GetFunzionalitaNomiByIdsAsync(IEnumerable<int> funzionalitaIds)
+        {
+            var funzionalitaNomi = await _ctx.Funzionalita
+                .Where(funz => funzionalitaIds.Contains((int)funz.Id))
+                .Select(funz => funz.Nome)
+                .ToListAsync();
+
+            return funzionalitaNomi;
+        }
+
+        
+
+
+
+
+
     }
 }

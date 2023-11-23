@@ -42,17 +42,27 @@ namespace EsercitazioneAspNet.Controllers
         [HttpGet("{bancaId}/funzionalita")]
         public async Task<ActionResult<IEnumerable<Funzionalitum>>> GetFunzionalitaBanca(int bancaId)
         {
-            var banca = await _bancaRepo.GetBancaAsync(bancaId);
-
-            if (banca == null)
+            try
             {
-                return NotFound("Banca non trovata");
+                var funz = await _bancaRepo.GetFunzionalitaAsync(bancaId);
+
+                if (funz == null)
+                {
+                    return NotFound("Banca non trovata");
+                }
+
+                
+
+                return Ok(funz);
             }
-
-            var funzionalita = banca.BancheFunzionalita;
-
-            return Ok(funzionalita);
+            catch (Exception ex)
+            {
+                
+                return StatusCode(500, $"Errore durante la richiesta delle funzionalità: {ex.Message}");
+            }
         }
+
+
 
 
 

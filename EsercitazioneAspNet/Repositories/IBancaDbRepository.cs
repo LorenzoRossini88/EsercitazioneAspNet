@@ -7,5 +7,7 @@ namespace EsercitazioneAspNet.Repositories
         Task<IEnumerable<Banche>> GetBancheAsync();
 
         Task<Banche?> GetBancaAsync(int bancaId);
+
+        Task<List<Funzionalitum>> GetFunzionalitaAsync(int bancheId);
     }
 }

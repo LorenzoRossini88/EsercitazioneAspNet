@@ -126,7 +126,7 @@ namespace EsercitazioneAspNet.Controllers
                 
                 await _utentiRepo.AddUtenteAsync(ris);
 
-                return Ok("aggiunto con successo utente con id: " + ris);
+                return Ok(new {Messaggio = "aggiunto con successo utente con id: " + ris});
             }
             return BadRequest(ModelState);
 
@@ -142,19 +142,18 @@ namespace EsercitazioneAspNet.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUtenteAsync(int id)
         {
-            var ut = await _utentiRepo.GetUtentiAsync();
-            var utente = ut.FirstOrDefault(c => c.Id == id);
+            var utente = await _utentiRepo.GetUtenteAsync(id);
 
             if (utente == null)
             {
-                return NotFound("utente non trovata");
+                return NotFound("Utente non trovato");
             }
 
             await _utentiRepo.DeleteUtenteAsync(utente);
 
             var res = _mapper.Map<List<UtentiDto>>(await _utentiRepo.GetUtentiAsync());
 
-            return Ok("utente eliminato con successo");
+            return Ok(res); // Restituisci la lista aggiornata degli utenti
         }
 
 
